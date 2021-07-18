@@ -19,9 +19,7 @@ IntRule0d::IntRule0d(){
 }
 
 IntRule0d::IntRule0d(int order) {
-    if (order != 0) {
-        DebugStop();
-    }
+    if (order != 0) 
 
     SetOrder(order);
 
@@ -32,13 +30,12 @@ void IntRule0d::SetOrder(int order) {
     fOrder = order;  
     
     if (order != 0) {
-        DebugStop();
-    }
 
-    int npoints = 1;
-    
-    fPoints.resize(npoints, 0);
-    fWeights.resize(npoints);
-    fWeights[0] = 1.;
-    
+        int npoints = 1;
+
+        fPoints.resize(npoints, 0);
+        fWeights.resize(npoints);
+        fWeights[0] = 1.;
+
+    }
 }

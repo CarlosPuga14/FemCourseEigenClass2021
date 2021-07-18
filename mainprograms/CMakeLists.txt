@@ -37,6 +37,12 @@ target_link_libraries (TestShape PRIVATE course_library Eigen3::Eigen Catch2::Ca
 add_executable(TestOneDProblem TestOneDProblem.cpp)
 target_link_libraries (TestOneDProblem  course_library Eigen3::Eigen)
 
+add_executable(mainCont mainContribute.cpp)
+target_link_libraries (mainCont course_library Eigen3::Eigen)
+
+add_executable(mainPostPos mainPosProcessamento.cpp)
+target_link_libraries (mainPostPos course_library Eigen3::Eigen)
+
 add_executable(TestTwoDProblem TestTwoDProblem.cpp)
 target_link_libraries (TestTwoDProblem course_library Eigen3::Eigen)
 

@@ -1,5 +1,5 @@
 // Gmsh project created on Sun Jun 11 13:28:27 2021
-a = 1;
+a = .25;
 //+
 Point(1) = {0, 0, 0, a};
 //+

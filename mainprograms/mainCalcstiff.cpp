@@ -30,9 +30,9 @@ int main ()
     
     GeoMesh gmesh;
     ReadGmsh read;
-    read.Read(gmesh,"quads.msh");
+    read.Read(gmesh,"malhatriang.msh");
     VTKGeoMesh plotmesh;
-    plotmesh.PrintGMeshVTK(&gmesh, "quads.vtk");
+    plotmesh.PrintGMeshVTK(&gmesh, "malhatriang.vtk");
     CompMesh cmesh(&gmesh);
     MatrixDouble perm(3,3);
     perm.setZero();

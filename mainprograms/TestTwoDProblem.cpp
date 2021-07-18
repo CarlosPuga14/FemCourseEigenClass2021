@@ -1,3 +1,5 @@
+
+
 //
 //  TestOneDProblem.cpp MODIFICADO DO ORIGINAL
 //  FemSC
@@ -6,24 +8,51 @@
 //
 //
 //TestOneDProblem cpp
-/*
- Os testes foram preparados com um proposito educacional,
- recomenda-se que o aluno entenda a funcionalidade de cada
- teste e posteriormente use com seu cÛdigo caso a caso
- */
+
+// Os testes foram preparados com um proposito educacional,
+// recomenda-se que o aluno entenda a funcionalidade de cada
+// teste e posteriormente use com seu cÛdigo caso a caso
+ 
 //      Obs: O xmax e xmin estao tomados como 4 e 0, respectivamente,
 //      caso estes valores sejam alterados, editar o teste TestNodes.
 //
 //
 #include <iostream>
 #include <math.h>
-#include "GeoMesh.h"
+#include "GeoNode.h"
+#include "GeoElement.h"
+#include "IntPointData.h"
+#include "CompElementTemplate.h"
+#include "Shape1d.h"
+#include "ShapeQuad.h"
 #include "ReadGmsh.h"
 #include "CompMesh.h"
+#include "GeoMesh.h"
+#include "GeoElement.h"
+#include "GeoElementTemplate.h"
+#include "MathStatement.h"
 #include "Poisson.h"
 #include "L2Projection.h"
 #include "Analysis.h"
+#include "IntRule.h"
+#include "IntRule1d.h"
+#include "IntRuleQuad.h"
+#include "IntRuleTetrahedron.h"
+#include "IntRuleTriangle.h"
+#include "Topology1d.h"
+#include "TopologyTriangle.h"
+#include "TopologyQuad.h"
+#include "TopologyTetrahedron.h"
+#include "PostProcess.h"
 #include "PostProcessTemplate.h"
+#include "DataTypes.h"
+#include "VTKGeoMesh.h"
+#include "CompElement.h"
+
+using std::cout;
+using std::endl;
+using std::cin;
+
 
 int main ()
 {
@@ -53,8 +82,10 @@ int main ()
     proj.setZero();
     val1.setZero();
     val2.setZero();
-    L2Projection *bc_linha = new L2Projection(0,2,proj,val1,val2);
-    L2Projection *bc_point = new L2Projection(0,3,proj,val1,val2);
+    L2Projection *bc_linha = new L2Projection(0,1,proj,val1,val2);
+    L2Projection *bc_point = new L2Projection(0,2,proj,val1,val2);
+    //L2Projection* bc_linha = new L2Projection(0, 2, proj, val1, val2);
+    //L2Projection* bc_point = new L2Projection(0, 3, proj, val1, val2);
     std::vector<MathStatement *> mathvec = {0,mat1,bc_point,bc_linha};
     cmesh.SetMathVec(mathvec);
     cmesh.SetDefaultOrder(1);
@@ -71,12 +102,7 @@ int main ()
         deriv(1,0) = (1-2.*x[1])*(1-x[0])*x[0];
     };
 
-//    if (!strcmp("Sol", name.c_str())) return ESol;
-//    if (!strcmp("DSol", name.c_str())) return EDSol;
-//    if (!strcmp("Flux", name.c_str())) return EFlux;
-//    if (!strcmp("Force", name.c_str())) return EForce;
-//    if (!strcmp("SolExact", name.c_str())) return ESolExact;
-//    if (!strcmp("DSolExact", name.c_str())) return EDSolExact;
+
     postprocess.AppendVariable("Sol");
     postprocess.AppendVariable("DSol");
     postprocess.AppendVariable("Flux");
@@ -85,6 +111,9 @@ int main ()
     postprocess.AppendVariable("DSolExact");
     postprocess.SetExact(exact);
     mat1->SetExactSolution(exact);
+
+
+
     locAnalysis.PostProcessSolution("quads.vtk", postprocess);
 
     VecDouble errvec;
@@ -92,3 +121,10 @@ int main ()
     
     return 0;
 }
+
+void CreateTestMesh(CompMesh &mesh, int order)
+{
+    DebugStop();
+}
+
+

@@ -12,17 +12,17 @@ GeomTetrahedron::GeomTetrahedron() {
 GeomTetrahedron::~GeomTetrahedron() {
 }
 
-GeomTetrahedron::GeomTetrahedron(const GeomTetrahedron &copy) {
+GeomTetrahedron::GeomTetrahedron(const GeomTetrahedron& copy) {
     fNodeIndices = copy.fNodeIndices;
 }
 
-GeomTetrahedron& GeomTetrahedron::operator=(const GeomTetrahedron& copy){
+GeomTetrahedron& GeomTetrahedron::operator=(const GeomTetrahedron& copy) {
     fNodeIndices = copy.fNodeIndices;
     return *this;
 }
 
-void GeomTetrahedron::Shape(const VecDouble &xi, VecDouble &phi, MatrixDouble &dphi) {
-    if(xi.size() != Dimension || phi.size() != nCorners || dphi.rows() != Dimension || dphi.cols() != nCorners) DebugStop();
+void GeomTetrahedron::Shape(const VecDouble& xi, VecDouble& phi, MatrixDouble& dphi) {
+    if (xi.size() != Dimension || phi.size() != nCorners || dphi.rows() != Dimension || dphi.cols() != nCorners) DebugStop();
     double qsi = xi[0];
     double eta = xi[1];
     double zeta = xi[2];
@@ -35,28 +35,28 @@ void GeomTetrahedron::Shape(const VecDouble &xi, VecDouble &phi, MatrixDouble &d
     dphi(0, 0) = -1.0;
     dphi(1, 0) = -1.0;
     dphi(2, 0) = -1.0;
-    
+
     dphi(0, 1) = 1.0;
     dphi(1, 1) = 0.0;
     dphi(2, 1) = 0.0;
-   
+
     dphi(0, 2) = 0.0;
     dphi(1, 2) = 1.0;
     dphi(2, 2) = 0.0;
-    
+
     dphi(0, 3) = 0.0;
     dphi(1, 3) = 0.0;
     dphi(2, 3) = 1.0;
 }
 
-void GeomTetrahedron::X(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble &x) {
-    if(xi.size() != Dimension) DebugStop();
-    if(x.size() != NodeCo.rows()) DebugStop();
-    if(NodeCo.cols() != nCorners) DebugStop();
+void GeomTetrahedron::X(const VecDouble& xi, MatrixDouble& NodeCo, VecDouble& x) {
+    if (xi.size() != Dimension) DebugStop();
+    if (x.size() != NodeCo.rows()) DebugStop();
+    if (NodeCo.cols() != nCorners) DebugStop();
     VecDouble phi(nCorners);
     MatrixDouble dphi(Dimension, nCorners);
-    
-    
+
+
     Shape(xi, phi, dphi);
     int space = NodeCo.rows();
 
@@ -69,10 +69,10 @@ void GeomTetrahedron::X(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble &x)
 }
 
 
-void GeomTetrahedron::GradX(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble &x, MatrixDouble &gradx) {
-    if(xi.size() != Dimension) DebugStop();
-    if(x.size() != NodeCo.rows()) DebugStop();
-    if(NodeCo.cols() != nCorners) DebugStop();
+void GeomTetrahedron::GradX(const VecDouble& xi, MatrixDouble& NodeCo, VecDouble& x, MatrixDouble& gradx) {
+    if (xi.size() != Dimension) DebugStop();
+    if (x.size() != NodeCo.rows()) DebugStop();
+    if (NodeCo.cols() != nCorners) DebugStop();
     gradx.resize(3, 3);
     gradx.setZero();
     x.resize(3);
@@ -85,7 +85,7 @@ void GeomTetrahedron::GradX(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble
     Shape(xi, phi, dphi);
     for (int i = 0; i < nCorners; i++) {
         for (int j = 0; j < Dimension; j++) {
-            x[j] += NodeCo(j,i) * phi[i];
+            x[j] += NodeCo(j, i) * phi[i];
             gradx(j, 0) += NodeCo(j, i) * dphi(0, i);
             gradx(j, 1) += NodeCo(j, i) * dphi(1, i);
             gradx(j, 2) += NodeCo(j, i) * dphi(2, i);
@@ -94,12 +94,12 @@ void GeomTetrahedron::GradX(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble
 }
 
 
-void GeomTetrahedron::SetNodes(const VecInt &nodes) {
-    if(nodes.size() != nCorners) DebugStop();
+void GeomTetrahedron::SetNodes(const VecInt& nodes) {
+    if (nodes.size() != nCorners) DebugStop();
     fNodeIndices = nodes;
 }
 
-void GeomTetrahedron::GetNodes(VecInt &nodes) const {
+void GeomTetrahedron::GetNodes(VecInt& nodes) const {
     nodes = fNodeIndices;
 }
 
@@ -116,6 +116,6 @@ GeoElementSide GeomTetrahedron::Neighbour(int side) const {
     return fNeighbours[side];
 }
 
-void GeomTetrahedron::SetNeighbour(int side, const GeoElementSide &neighbour) {
-    fNeighbours[side]=neighbour;
+void GeomTetrahedron::SetNeighbour(int side, const GeoElementSide& neighbour) {
+    fNeighbours[side] = neighbour;
 }

@@ -24,14 +24,32 @@ int TopologyQuad::NSideNodes(int side) {
     return nsidenodes[side];
 }
 
-int TopologyQuad::SideNodeLocIndex(int side, int node) {
+
+// local node index of a node associated with a side
+int TopologyQuad::SideNodeLocIndex(int side, int node)
+{
+    int SideNodes[4][2] = { {0,1},{1,2},{2,3},{3,0} };
+    if (side < 4 && node == 0)
+        return side;
+    if (side >= 4 && side < 8 && node < 2)
+        return (side + node) % 4;
+    if (side == 8 && node < 4)
+        return node;
+
+    std::cout << "TopologyQuad::SideNodeIndex inconsistent side or node" << std::endl;
+    DebugStop();
+    return EXIT_FAILURE;
+}
+
+/*int TopologyQuad::SideNodeLocIndex(int side, int node) {
     if (side < 4 && node == 0) return side;
     if (side >= 4 && side < 8 && node < 2) return (side + node) % 4;
     if (side == 8 && node < 4) return node;
     std::cout << "TopologyQuad::SideNodeIndex inconsistent side or node " << side
             << ' ' << node << std::endl;
     return -1;
-}
+
+} */
 
 MElementType TopologyQuad::Type() {
 

@@ -14,20 +14,20 @@
 Assemble::Assemble() {
 }
 
-Assemble::Assemble(CompMesh *mesh) {
+Assemble::Assemble(CompMesh* mesh) {
     cmesh = mesh;
 }
 
-Assemble::Assemble(const Assemble &copy) {
+Assemble::Assemble(const Assemble& copy) {
     cmesh = copy.cmesh;
 }
 
-Assemble &Assemble::operator=(const Assemble &copy) {
+Assemble& Assemble::operator=(const Assemble& copy) {
     cmesh = copy.cmesh;
     return *this;
 }
 
-void Assemble::SetMesh(CompMesh *mesh) {
+void Assemble::SetMesh(CompMesh* mesh) {
     cmesh = mesh;
 }
 
@@ -42,21 +42,21 @@ int64_t Assemble::NEquations() {
     return neq;
 }
 
-void Assemble::OptimizeBandwidth() {    
+void Assemble::OptimizeBandwidth() {
 }
 
-void Assemble::Compute(MatrixDouble &globmat, MatrixDouble &rhs) {
-    
-    auto neq = NEquations();
-    
-    globmat.resize(neq, neq);
+void Assemble::Compute(MatrixDouble& globmat, MatrixDouble& rhs) {
+    int64_t nelem = cmesh->GetGeoMesh()->NumElements();     // int64_t: qual a diferenca?
+    int ne = this->NEquations();
+
+    globmat.resize(ne, ne);
     globmat.setZero();
-    rhs.resize(neq, 1);
+    rhs.resize(ne, 1);
     rhs.setZero();
-    
-    int64_t nelem = cmesh->GetGeoMesh()->NumElements();
+
+
     for (int el = 0; el < nelem; el++) {
-        CompElement *cel = cmesh->GetElement(el);
+        CompElement* cel = cmesh->GetElement(el);
 
         int nshape = cel->NShapeFunctions();
         int nstate = cel->GetStatement()->NState();
@@ -66,10 +66,33 @@ void Assemble::Compute(MatrixDouble &globmat, MatrixDouble &rhs) {
         ef.setZero();
 
         cel->CalcStiff(ek, ef);
-        
+
         //+++++++++++++++++
-        std::cout << "\nPLEASE IMPLEMENT ME\n" << __PRETTY_FUNCTION__ << std::endl;
-        DebugStop();
-        //+++++++++++++++++
+        // // Please implement me
+        // std::cout << "\nPLEASE IMPLEMENT ME\n" << __PRETTY_FUNCTION__ << std::endl;
+        // DebugStop();
+
+        int ndof = cel->NDOF();  //NDOF is the degree of freedom of each equation, right?
+        VecInt iglob(ne, 1);
+        int ni = 0;
+        for (int i = 0; i < ndof; i++) {
+            int dofindex = cel->GetDOFIndex(i);
+            DOF dof = cmesh->GetDOF(dofindex);
+            for (int j = 0; j < dof.GetNShape() * dof.GetNState(); j++) {
+                iglob[ni] = dof.GetFirstEquation() + j;
+                ni++;
+            } 
+        } 
+
+        for (int i = 0; i < ek.rows(); i++) {
+            int IG = iglob[i];
+            rhs(IG, 0) += ef(i, 0);
+
+            for (int j = 0; j < ek.rows(); j++) {
+                int JG = iglob[j];
+                globmat(IG, JG) += ek(i, j);
+            } 
+        } 
+    //+++++++++++++++++
     }
 }

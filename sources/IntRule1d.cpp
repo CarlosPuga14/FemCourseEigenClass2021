@@ -20,12 +20,53 @@ IntRule1d::IntRule1d(){
 }
 
 IntRule1d::IntRule1d(int order) : IntRule(order) {
-    DebugStop();
+    SetOrder(order);
 }
 
 void IntRule1d::SetOrder(int order) {
     fOrder = order;
-    DebugStop();
+    if (order < 0 || order > MaxOrder()) DebugStop();
+    switch (order) {
+    case 0:
+    case 1:
+        fPoints.resize(1, 1);
+        fWeights.resize(1);
+
+        fPoints(0, 0) = 0.;
+        fWeights[0] = 2.;
+
+        break;
+    case 2:
+    case 3:
+        fPoints.resize(2, 1);
+        fWeights.resize(2);
+
+        fPoints(0, 0) = -1. / sqrt(3.);
+        fWeights[0] = 1.;
+
+        fPoints(1, 0) = 1. / sqrt(3.);
+        fWeights[1] = 1.;
+
+        break;
+    case 4:
+    case 5:
+        fPoints.resize(3, 1);
+        fWeights.resize(3);
+
+        fPoints(0, 0) = -sqrt(3. / 5.);
+        fWeights[0] = 5. / 9.;
+
+        fPoints(1, 0) = 0.;
+        fWeights[1] = 8. / 9.;
+
+        fPoints(2, 0) = sqrt(3. / 5.);
+        fWeights[2] = 5. / 9.;
+        break;
+
+    default:
+        DebugStop();
+        break;
+    }
 }
 
 void IntRule1d::gauleg(const double x1, const double x2, VecDouble &co, VecDouble &w){

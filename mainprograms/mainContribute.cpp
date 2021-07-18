@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <math.h>
 #include "IntRule.h"
@@ -88,3 +87,4 @@ int main ()
     std::cout << "ef\n" << ef << std::endl;
     return 0;
 }
+

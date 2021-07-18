@@ -29,9 +29,62 @@ void ShapeQuad::Shape(const VecDouble &xi, VecInt &orders, VecDouble &phi, Matri
         std::cout << "ShapeQuad::Shape, only implemented until order = 2" << std::endl;
         DebugStop();
     }
+    
+    int nshape = NShapeFunctions(orders);
+    
+    
+    double csi = xi[0];
+    double eta = xi[1];
 
-    std::cout << "Please implement me\n";
-    DebugStop();
+    phi.resize(nshape);
+    dphi.resize(2, nshape);
+    
+    phi[0] = 0.25* (1. - csi) * (1. - eta);
+    phi[1] = 0.25 * (1. + csi) * (1. - eta);
+    phi[2] = 0.25 * (1. + csi) * (1. + eta);
+    phi[3] = 0.25 * (1. - csi) * (1. + eta);
+
+    dphi(0, 0) = 0.25 * (-1 + eta);
+    dphi(1, 0) = 0.25 * (-1 + csi);
+    dphi(0, 1) = 0.25*(1. - eta);
+    dphi(1, 1) = 0.25 * (-1 - csi);
+    dphi(0, 2) = 0.25*(1. + eta);
+    dphi(1, 2) = 0.25*(1. + csi);
+    dphi(0, 3) = 0.25 * (-1 - eta);
+    dphi(1, 3) = 0.25*(1. - csi);
+
+    int count = 4;
+ 
+    for (int i = 4; i < 8; i ++) {
+        
+        if (orders[i] == 2) {
+  
+            int aux1 = i % 4;
+            int aux2 = (i + 1) % 4;
+            int aux3 = (i + 2) % 4 ;
+            
+            phi[count] = 4. * phi[aux1] * (phi[aux2] + phi[aux3]);
+            dphi(0, count) = 4. * (dphi(0, aux1) * (phi[aux2] + phi[aux3]) + phi[aux1] * (dphi(0, aux2) + dphi(0, aux3)));
+            dphi(1, count) = 4. * (dphi(1, aux1) * (phi[aux2] + phi[aux3]) + phi[aux1] * (dphi(1, aux2) + dphi(1, aux3)));
+
+            count++;
+        }
+
+        else if (orders[i] != 1) DebugStop();
+
+    }
+    
+    
+    if (orders[8] == 2) {
+        phi[count] = 16. * phi[0] * phi[2];
+        dphi(0, count) = 16. * (dphi(0, 0) * phi[2] + phi[0] * dphi(0, 2));
+        dphi(1, count) = 16. * (dphi(1, 0) * phi[2] + phi[0] * dphi(1, 2));
+        count++;
+    }
+    else if (orders[8] != 1) DebugStop();
+    if (count != nshape) DebugStop();
+
+    
 }
 
 /// returns the number of shape functions associated with a side
@@ -57,6 +110,6 @@ int ShapeQuad::NShapeFunctions(VecInt &orders){
     for(int in=4; in<orders.size(); in++) {
         res += NShapeFunctions(in, orders[in]);
     }
-    
+   
     return res;
 }
