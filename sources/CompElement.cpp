@@ -41,9 +41,6 @@ CompElement& CompElement::operator=(const CompElement& copy) {
 CompElement::~CompElement() {
 }
 
-// CompElement *CompElement::Clone() const {
-//     return new CompElement(*this);
-// }
 
 DOF& CompElement::GetDOF(int i) const
 {
@@ -179,11 +176,6 @@ void CompElement::CalcStiff(MatrixDouble& ek, MatrixDouble& ef) const {
     ek.setZero();
     ef.setZero();
 
-    //+++++++++++++++++
-    // // Please implement me
-    // std::cout << "\nPLEASE IMPLEMENT ME\n" << __PRETTY_FUNCTION__ << std::endl;
-    // DebugStop();
-
     IntRule* intrule = this->GetIntRule();
     int maxIntOrder = 5;
     intrule->SetOrder(maxIntOrder);
@@ -201,8 +193,6 @@ void CompElement::CalcStiff(MatrixDouble& ek, MatrixDouble& ef) const {
 
         material->Contribute(data, weight, ek, ef);  
 
-       
-       
     }
      
 }

@@ -189,8 +189,7 @@ void Poisson::PostProcessSolution(const IntPointData& data, const int var, VecDo
         Solout.resize(3);
         for (int i = 0; i < 3; i++) {
             Solout[i] = gradudx(i, 0);
-        }
-        //+++++++++++++++++           
+        }          
     }
     break;
     case 3: //EFlux
@@ -200,7 +199,6 @@ void Poisson::PostProcessSolution(const IntPointData& data, const int var, VecDo
         for (int i = 0; i < 3; i++) {
             Solout[i] = flux(i, 0);
         }
-        //+++++++++++++++++
     }
     break;
 
@@ -215,18 +213,15 @@ void Poisson::PostProcessSolution(const IntPointData& data, const int var, VecDo
 
     case 5: //ESolExact
     {
-        //+++++++++++++++++
         Solout.resize(nstate);
         VecDouble sol(nstate);
         MatrixDouble dsol(3, nstate);
         if (SolutionExact) this->SolutionExact(data.x, Solout, dsol);
         else Solout.setZero();
-        //+++++++++++++++++
     }
     break;
     case 6: //EDSolExact
     {
-        //+++++++++++++++++
         Solout.resize(3);
         VecDouble sol(nstate);
         MatrixDouble dsol(3, nstate);
@@ -236,7 +231,6 @@ void Poisson::PostProcessSolution(const IntPointData& data, const int var, VecDo
         for (int i = 0; i < 3; i++) {
             Solout[i] = dsol(i, 0);
         }
-        //+++++++++++++++++
     }
     break;
 

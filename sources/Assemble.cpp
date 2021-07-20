@@ -54,7 +54,6 @@ void Assemble::Compute(MatrixDouble& globmat, MatrixDouble& rhs) {
     rhs.resize(ne, 1);
     rhs.setZero();
 
-
     for (int el = 0; el < nelem; el++) {
         CompElement* cel = cmesh->GetElement(el);
 
@@ -66,11 +65,6 @@ void Assemble::Compute(MatrixDouble& globmat, MatrixDouble& rhs) {
         ef.setZero();
 
         cel->CalcStiff(ek, ef);
-
-        //+++++++++++++++++
-        // // Please implement me
-        // std::cout << "\nPLEASE IMPLEMENT ME\n" << __PRETTY_FUNCTION__ << std::endl;
-        // DebugStop();
 
         int ndof = cel->NDOF();  //NDOF is the degree of freedom of each equation, right?
         VecInt iglob(ne, 1);
@@ -93,6 +87,5 @@ void Assemble::Compute(MatrixDouble& globmat, MatrixDouble& rhs) {
                 globmat(IG, JG) += ek(i, j);
             } 
         } 
-    //+++++++++++++++++
     }
 }
