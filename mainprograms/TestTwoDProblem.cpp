@@ -82,10 +82,10 @@ int main ()
     proj.setZero();
     val1.setZero();
     val2.setZero();
-    L2Projection *bc_linha = new L2Projection(0,1,proj,val1,val2);
-    L2Projection *bc_point = new L2Projection(0,2,proj,val1,val2);
-    //L2Projection* bc_linha = new L2Projection(0, 2, proj, val1, val2);
-    //L2Projection* bc_point = new L2Projection(0, 3, proj, val1, val2);
+    //L2Projection *bc_linha = new L2Projection(0,1,proj,val1,val2);
+    //L2Projection *bc_point = new L2Projection(0,2,proj,val1,val2);
+    L2Projection* bc_linha = new L2Projection(0, 2, proj, val1, val2);
+    L2Projection* bc_point = new L2Projection(0, 3, proj, val1, val2);
     std::vector<MathStatement *> mathvec = {0,mat1,bc_point,bc_linha};
     cmesh.SetMathVec(mathvec);
     cmesh.SetDefaultOrder(1);
