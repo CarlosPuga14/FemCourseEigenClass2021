@@ -40,10 +40,6 @@ int main ()
 {
     GeoMesh gmesh;
     ReadGmsh read;
-  //  std::string filename("oneD.msh");
-//#ifdef MACOSX
-   // filename = "../"+filename;
-//#endif
     read.Read(gmesh,"oneD.msh");
 
     CompMesh cmesh(&gmesh);
@@ -67,8 +63,8 @@ int main ()
     proj.setZero();
     val1.setZero();
     val2.setZero();
-    L2Projection *bc_linha = new L2Projection(0,1,proj,val1,val2); //2
-    L2Projection *bc_point = new L2Projection(0,3,proj,val1,val2); //3
+    L2Projection *bc_linha = new L2Projection(0,1,proj,val1,val2); 
+    L2Projection *bc_point = new L2Projection(0,3,proj,val1,val2); 
     std::vector<MathStatement *> mathvec = {0,mat1,bc_linha,bc_point};
     cmesh.SetMathVec(mathvec);
     cmesh.SetDefaultOrder(1);
@@ -79,16 +75,13 @@ int main ()
     Analysis AnalysisLoc(&cmesh);
     AnalysisLoc.RunSimulation();
 
-    
     PostProcessTemplate<Poisson> postprocess;
     postprocess.SetExact(exact);
-
-
     
     VecDouble errvec;
     errvec = AnalysisLoc.PostProcessError(std::cout, postprocess);
     
-    VTKGeoMesh::PrintCMeshVTK(&cmesh, 2, "oneD.vtk");
+    VTKGeoMesh::PrintCMeshVTK(&cmesh, 2, "oneD4.vtk");
 
     return 0;
 }
@@ -99,14 +92,5 @@ void exact(const VecDouble &point,VecDouble &val, MatrixDouble &deriv){
     deriv(0, 0) = 6.*point[0]-30.;
     val[0]= 3.*point[0]*point[0] -30.*point[0];
     return;
-
-
-    //double E=exp(1.0);
-    //VecDouble x(1);
-    //x[0]=point[0];
-    //
-   // val[0]=(30. + 100.*pow(E,100.) - 130.*pow(E,10.*x[0]) - 3*x[0] + 3*pow(E,100.)*x[0])/(10.*(-1. + pow(E,100.)));
-    //deriv(0,0)=(-3. + 3*pow(E,100) - 1300*pow(E,10*x[0]))/(10.*(-1 + pow(E,100)));
-
 }
 

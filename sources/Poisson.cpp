@@ -222,6 +222,7 @@ void Poisson::PostProcessSolution(const IntPointData& data, const int var, VecDo
     break;
     case 6: //EDSolExact
     {
+        //+++++++++++++++++
         Solout.resize(3);
         VecDouble sol(nstate);
         MatrixDouble dsol(3, nstate);
@@ -231,6 +232,7 @@ void Poisson::PostProcessSolution(const IntPointData& data, const int var, VecDo
         for (int i = 0; i < 3; i++) {
             Solout[i] = dsol(i, 0);
         }
+        //+++++++++++++++++
     }
     break;
 

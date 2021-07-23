@@ -1,5 +1,3 @@
-
-
 //
 //  TestOneDProblem.cpp MODIFICADO DO ORIGINAL
 //  FemSC
@@ -58,7 +56,7 @@ int main ()
 {
     GeoMesh gmesh;
     ReadGmsh read;
-    std::string filename("quads.msh");
+    std::string filename("quad3.msh");
 #ifdef MACOSX
     filename = "../"+filename;
 #endif
@@ -95,11 +93,11 @@ int main ()
     PostProcessTemplate<Poisson> postprocess;
     auto exact = [](const VecDouble &x, VecDouble &val, MatrixDouble &deriv)
     {
-        val[0] = (1. - x[0]) * x[0] * (1. - x[1]) * x[1] * (-22. * cos(11. * x[1])) + 14. * sin(4. * x[0]) + 18. * sin(12. * x[1]);
-        deriv(0,0) = 2. * (-1. + x[1]) * x[1] * (28 * (-1. + x[0])) * x[0] * cos(4.*x[0]) + (-1. + 2. * x[0]) * (-11. * cos(11. * x[1])) + 7. * sin(4.*x[0]) + 9. * sin(12. * x[1]);
-        deriv(1,0) = (1. - x[0]) * x[0] * (-2. * (-1. + x[1])) * x[1] * (108. * cos(12. * x[1])) + 121. * sin(11.*x[1]) - 2. * (-1. + x[1]) * (-11. * cos(11.*x[1])) + 7. * sin(4. * x[0]) + 9. * sin(12.*x[1]) - 2. * x[1] * (-11. * cos(11.*x[1]) + 7. * sin(4.*x[0]) + 9. * sin(12.*x[1]));
-    };
 
+        val[0] = (1. - x[0]) * x[0] * (1. - x[1]) * x[1] * (-22. * cos(11. * x[1]) + 14. * sin(4. * x[0]) + 18. * sin(12. * x[1]));
+        deriv(0, 0) = 56. * (1. - x[0]) * x[0] * (1. - x[1]) * x[1] * cos(4. * x[0]) + (1. - x[0]) * (1. - x[1]) * x[1] * (-22. * cos(11. * x[1]) + 14. * sin(4. * x[0]) + 18. * sin(12. * x[1])) - x[0] * (1. - x[1]) * x[1] * (-22. * cos(11. * x[1]) + 14. * sin(4. * x[0]) + 18. * sin(12. * x[1]));
+        deriv(1, 0) = (1. - x[0]) * x[0] * (1. - x[1]) * x[1] * (216. * cos(12. * x[1]) + 242. * sin(11. * x[1])) + (1. - x[0]) * x[0] * (1. - x[1]) * (-22. * cos(11. * x[1]) + 14. * sin(4. * x[0]) + 18. * sin(12. * x[1])) - (1. - x[0]) * x[0] * x[1] * (-22. * cos(11. * x[1]) + 14. * sin(4. * x[0]) + 18. * sin(12. * x[1]));
+    };
 
     postprocess.AppendVariable("Sol");
     postprocess.AppendVariable("DSol");
@@ -109,8 +107,6 @@ int main ()
     postprocess.AppendVariable("DSolExact");
     postprocess.SetExact(exact);
     mat1->SetExactSolution(exact);
-
-
 
     locAnalysis.PostProcessSolution("quads.vtk", postprocess);
 
