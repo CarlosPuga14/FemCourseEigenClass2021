@@ -18,6 +18,8 @@ using std::cout;
 using std::endl;
 using std::cin;
 
+// comentário
+
 void MasterCo(MElementType elt, MatrixDouble &cornerco)
 {
     switch (elt) {
